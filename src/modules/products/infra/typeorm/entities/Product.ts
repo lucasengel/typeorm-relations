@@ -7,21 +7,29 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import OrdersProducts from '@modules/orders/infra/typeorm/entities/OrdersProducts';
+import OrdersProducts from '@modules/orders/infra/typeorm/entities/OrderProducts';
 
+@Entity('products')
 class Product {
-  id: string;
+  @PrimaryGeneratedColumn('uuid')
+  product_id: string;
 
+  @Column()
   name: string;
 
+  @Column()
   price: number;
 
+  @Column()
   quantity: number;
 
+  @OneToMany(() => OrdersProducts, (orderprod) => orderprod.product)
   order_products: OrdersProducts[];
 
+  @CreateDateColumn()
   created_at: Date;
 
+  @UpdateDateColumn()
   updated_at: Date;
 }
 
