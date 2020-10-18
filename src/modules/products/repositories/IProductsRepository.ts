@@ -4,7 +4,7 @@ import ICreateProductDTO from '../dtos/ICreateProductDTO';
 import IUpdateProductsQuantityDTO from '../dtos/IUpdateProductsQuantityDTO';
 
 interface IFindProducts {
-  product_id: string;
+  id: string;
 }
 
 export default interface IProductsRepository {

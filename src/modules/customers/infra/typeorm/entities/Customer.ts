@@ -11,16 +11,13 @@ import {
 @Entity('customers')
 class Customer {
   @PrimaryGeneratedColumn('uuid')
-  customer_id: string;
+  id: string;
 
   @Column()
   name: string;
 
   @Column()
   email: string;
-
-  @OneToMany(() => Order, (order) => order.customer)
-  orders: Order[];
 
   @CreateDateColumn()
   created_at: Date;

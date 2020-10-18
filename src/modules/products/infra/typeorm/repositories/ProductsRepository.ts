@@ -6,7 +6,7 @@ import IUpdateProductsQuantityDTO from '@modules/products/dtos/IUpdateProductsQu
 import Product from '../entities/Product';
 
 interface IFindProducts {
-  product_id: string;
+  id: string;
 }
 
 class ProductsRepository implements IProductsRepository {
@@ -43,13 +43,23 @@ class ProductsRepository implements IProductsRepository {
   }
 
   public async findAllById(products: IFindProducts[]): Promise<Product[]> {
-    return [];
+    const productIds = products.map((prod) => prod.id);
+
+    const foundProducts = await this.ormRepository.find({
+      where: {
+        id: In(productIds),
+      },
+    });
+
+    return foundProducts;
   }
 
   public async updateQuantity(
     products: IUpdateProductsQuantityDTO[],
   ): Promise<Product[]> {
-    return [];
+    const savedProducts = await this.ormRepository.save(products);
+
+    return savedProducts;
   }
 }
 

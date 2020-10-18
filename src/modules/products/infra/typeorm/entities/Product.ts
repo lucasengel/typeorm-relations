@@ -12,7 +12,7 @@ import OrdersProducts from '@modules/orders/infra/typeorm/entities/OrderProducts
 @Entity('products')
 class Product {
   @PrimaryGeneratedColumn('uuid')
-  product_id: string;
+  id: string;
 
   @Column()
   name: string;

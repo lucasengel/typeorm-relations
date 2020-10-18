@@ -7,7 +7,7 @@ export default class CreateTables1602863865312 implements MigrationInterface {
         name: 'customers',
         columns: [
           {
-            name: 'customer_id',
+            name: 'id',
             type: 'uuid',
             isPrimary: true,
             generationStrategy: 'uuid',
@@ -41,7 +41,7 @@ export default class CreateTables1602863865312 implements MigrationInterface {
         name: 'products',
         columns: [
           {
-            name: 'product_id',
+            name: 'id',
             type: 'uuid',
             isPrimary: true,
             generationStrategy: 'uuid',
@@ -82,7 +82,7 @@ export default class CreateTables1602863865312 implements MigrationInterface {
         name: 'orders',
         columns: [
           {
-            name: 'order_id',
+            name: 'id',
             type: 'uuid',
             isPrimary: true,
             generationStrategy: 'uuid',
@@ -112,7 +112,7 @@ export default class CreateTables1602863865312 implements MigrationInterface {
         name: 'order_products',
         columns: [
           {
-            name: 'order_products_id',
+            name: 'id',
             type: 'uuid',
             isPrimary: true,
             generationStrategy: 'uuid',
