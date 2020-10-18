@@ -5,7 +5,7 @@ export default class ForeignKeys1602878017545 implements MigrationInterface {
     await queryRunner.createForeignKey(
       'orders',
       new TableForeignKey({
-        name: 'OrderCustomer',
+        name: 'OrdersCustomer',
         columnNames: ['customer_id'],
         referencedColumnNames: ['customer_id'],
         referencedTableName: 'customers',
@@ -16,15 +16,16 @@ export default class ForeignKeys1602878017545 implements MigrationInterface {
 
     await queryRunner.createForeignKeys('order_products', [
       new TableForeignKey({
-        name: 'OrderProductOrder',
+        name: 'OrderProductsOrder',
         columnNames: ['order_id'],
         referencedColumnNames: ['order_id'],
         referencedTableName: 'orders',
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
       }),
+
       new TableForeignKey({
-        name: 'OrderProductProduct',
+        name: 'OrderProductsProduct',
         columnNames: ['product_id'],
         referencedColumnNames: ['product_id'],
         referencedTableName: 'products',
@@ -35,7 +36,8 @@ export default class ForeignKeys1602878017545 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<any> {
-    await queryRunner.dropForeignKey('order_products', 'OrderProduct');
+    await queryRunner.dropForeignKey('order_products', 'OrderProductsProduct');
+    await queryRunner.dropForeignKey('order_products', 'OrderProductsOrder');
     await queryRunner.dropForeignKey('orders', 'OrderCustomer');
   }
 }

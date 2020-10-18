@@ -26,12 +26,10 @@ export default class CreateTables1602863865312 implements MigrationInterface {
           {
             name: 'name',
             type: 'varchar',
-            isNullable: false,
           },
           {
             name: 'email',
             type: 'varchar',
-            isNullable: false,
             isUnique: true,
           },
         ],
@@ -62,20 +60,17 @@ export default class CreateTables1602863865312 implements MigrationInterface {
           {
             name: 'name',
             type: 'varchar',
-            isNullable: false,
           },
           {
             name: 'price',
             type: 'decimal',
             scale: 2,
             precision: 10,
-            isNullable: false,
             default: 0,
           },
           {
             name: 'quantity',
             type: 'smallint',
-            isNullable: false,
             default: 0,
           },
         ],
@@ -106,6 +101,7 @@ export default class CreateTables1602863865312 implements MigrationInterface {
           {
             name: 'customer_id',
             type: 'uuid',
+            isNullable: true,
           },
         ],
       }),
@@ -135,23 +131,23 @@ export default class CreateTables1602863865312 implements MigrationInterface {
           {
             name: 'order_id',
             type: 'uuid',
+            isNullable: true,
           },
           {
             name: 'product_id',
             type: 'uuid',
+            isNullable: true,
           },
           {
             name: 'price',
             type: 'decimal',
             scale: 2,
             precision: 10,
-            isNullable: false,
             default: 0,
           },
           {
             name: 'quantity',
             type: 'smallint',
-            isNullable: false,
             default: 0,
           },
         ],
