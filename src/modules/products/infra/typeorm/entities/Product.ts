@@ -7,7 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import OrdersProducts from '@modules/orders/infra/typeorm/entities/OrderProducts';
+import OrdersProducts from '@modules/orders/infra/typeorm/entities/OrdersProducts';
 
 @Entity('products')
 class Product {
@@ -17,13 +17,15 @@ class Product {
   @Column()
   name: string;
 
-  @Column()
+  @Column('decimal')
   price: number;
 
-  @Column()
+  @Column('smallint')
   quantity: number;
 
-  @OneToMany(() => OrdersProducts, (orderprod) => orderprod.product)
+  @OneToMany(() => OrdersProducts, (orderprod) => orderprod.product, {
+    cascade: true,
+  })
   order_products: OrdersProducts[];
 
   @CreateDateColumn()

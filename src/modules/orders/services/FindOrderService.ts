@@ -4,7 +4,7 @@ import Order from '../infra/typeorm/entities/Order';
 import IOrdersRepository from '../repositories/IOrdersRepository';
 
 interface IRequest {
-  id: string;
+  order_id: string;
 }
 
 @injectable()
@@ -13,7 +13,7 @@ class FindOrderService {
     @inject('OrdersRepository') private ordersRepository: IOrdersRepository,
   ) { }
 
-  public async execute({ id }: IRequest): Promise<Order | undefined> {
+  public async execute({ order_id: id }: IRequest): Promise<Order | undefined> {
     const order = await this.ordersRepository.findById(id);
 
     return order;

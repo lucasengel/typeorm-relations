@@ -13,7 +13,7 @@ interface IProduct {
 }
 
 interface IRequest {
-  id: string;
+  customer_id: string;
   products: IProduct[];
 }
 
@@ -29,71 +29,66 @@ class CreateOrderService {
     private customersRepository: ICustomersRepository,
   ) { }
 
-  /**
-   * Creates order passing the customer_id and an array of objects
-   * containing product_id and quantities
-   * @param id customer id as uuid string
-   * @param products [{ id: string, quantity: number}]
-   */
-  public async execute({ id, products }: IRequest): Promise<Order> {
+  public async execute({ customer_id, products }: IRequest): Promise<Order> {
     // Check for customer existence
-    const customer = await this.customersRepository.findById(id);
+    const customer = await this.customersRepository.findById(customer_id);
 
     if (!customer) throw new AppError('No user found');
 
-    // Check for products existence and fetch data
-    const fetchedProducts = await this.productsRepository.findAllById(products);
+    const productsIds = products.map((prod) => ({ id: prod.id }));
 
-    if (!fetchedProducts.length) throw new AppError("Couldn't fetch products.");
-
-    const fetchedProductsIds = fetchedProducts.map((product) => product.id);
-
-    const inexistingItems = products.filter(
-      (product) => !fetchedProductsIds.includes(product.id),
+    const fetchedProducts = await this.productsRepository.findAllById(
+      productsIds,
     );
 
-    if (inexistingItems.length)
-      throw new AppError(
-        `These items do not exist: ${inexistingItems.join(', ')}`,
+    if (fetchedProducts.length !== products.length)
+      throw new AppError('Unable to find one or more products');
+
+    const serializedProducts = products.map(({ id, quantity }) => {
+      const productDetails = fetchedProducts.find(
+        (product) => product.id === id,
       );
+
+      const price = Number(productDetails?.price);
+
+      return {
+        product_id: id,
+        quantity,
+        price,
+      };
+    });
 
     // Check for products availability
 
-    const insuficientQuantity = products.filter(
-      (product) =>
-        fetchedProducts.filter((fprod) => fprod.id === product.id)[0].quantity <
-        product.quantity,
-    );
+    // const insufficientQuantity = products.filter(
+    //   (product) =>
+    //     fetchedProducts.filter((fprod) => fprod.id === product.id)[0].quantity <
+    //     product.quantity,
+    // );
 
-    if (insuficientQuantity.length)
-      throw new AppError(
-        `These items have insuficient quantity: ${insuficientQuantity.join(
-          ', ',
-        )}`,
-      );
-
-    const serializedProduct = fetchedProducts.map((product) => ({
-      id: product.id,
-      quantity: product.quantity,
-      price: product.price,
-    }));
+    // if (insufficientQuantity.length)
+    //   throw new AppError(
+    //     `These items have insufficient quantity: ${insufficientQuantity.join(
+    //       ', ',
+    //     )}`,
+    //   );
 
     const order = await this.ordersRepository.create({
       customer,
-      products: serializedProduct,
+      products: serializedProducts,
     });
 
     // Subtract products quantities
-    const { order_products } = order;
+    // const { order_products } = order;
 
-    const orderedProductsQuantity = order_products.map((product) => ({
-      id: product.product_id,
-      quantity:
-        fetchedProducts.filter((p) => p.id === product.product_id)[0].quantity -
-        product.quantity,
-    }));
+    // const orderedProductsQuantity = order_products.map((product) => ({
+    //   id: product.product_id,
+    //   quantity:
+    //     fetchedProducts.filter((p) => p.id === product.product_id)[0].quantity -
+    //     product.quantity,
+    // }));
 
-    await this.productsRepository.updateQuantity(orderedProductsQuantity);
+    // await this.productsRepository.updateQuantity(orderedProductsQuantity);
 
     return order;
   }

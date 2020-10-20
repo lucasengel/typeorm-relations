@@ -1,11 +1,9 @@
-import Order from '@modules/orders/infra/typeorm/entities/Order';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
 } from 'typeorm';
 
 @Entity('customers')
